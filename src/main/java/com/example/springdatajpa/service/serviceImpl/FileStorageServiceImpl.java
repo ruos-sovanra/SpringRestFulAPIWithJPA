@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -38,6 +39,33 @@ public class FileStorageServiceImpl implements FileStorageService {
 
     @Override
     public List<String> uploadMultipleFiles(MultipartFile[] files) {
-        return null;
+        List<String> newFileNames = new ArrayList<>();
+        for (MultipartFile file : files) {
+            try{
+                Path imageStorageLocation = Path.of(fileLocation);
+                if (!Files.exists(imageStorageLocation)) {
+                    Files.createDirectories(imageStorageLocation);
+                }
+                String newFileName = UUID.randomUUID()+"."+file.getOriginalFilename().split("\\.")[1];
+                Path targetLocation = imageStorageLocation.resolve(newFileName);
+                Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
+                newFileNames.add(newFileName);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+        return newFileNames;
     }
+
+    @Override
+    public void deleteFile(String fileName) {
+        try{
+            Path imageStorageLocation = Path.of(fileLocation);
+            Path targetLocation = imageStorageLocation.resolve(fileName);
+            Files.delete(targetLocation);
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 }

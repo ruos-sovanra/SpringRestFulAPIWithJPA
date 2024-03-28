@@ -8,4 +8,5 @@ import java.util.List;
 public interface FileStorageService {
     String uploadSingleFile(MultipartFile file) throws IOException;
     List<String> uploadMultipleFiles(MultipartFile[] files);
+    void deleteFile(String fileName);
 }

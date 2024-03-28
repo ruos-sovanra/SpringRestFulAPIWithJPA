@@ -6,6 +6,10 @@
         username: postgres
         password: qwerty
         driver-class-name: org.postgresql.Driver
+      servlet:
+        multipart:
+          max-file-size: 1MB
+          max-request-size: 1MB
       jpa:
         hibernate:
           ddl-auto: update
@@ -19,4 +23,5 @@
 
     file_storage:
       image_location: "filestorage/images/"
+      client_path: "/images/**"
       database_location: "filestorage/data/"
